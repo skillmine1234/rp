@@ -1,0 +1,34 @@
+- if params[:private_reports] == 'true' then 
+  %br
+  %table.rp-table
+    %thead{style: 'text-align:center; font-weight:bold;'}
+      %tr
+        %th Available Report
+        %th
+
+    %tbody{style: 'text-align:center;'}
+      - @available_reports.each do |report|
+        %tr
+          %td= report.name
+          %td= link_to 'Show Authorized Users', authorized_users_path(available_report_id: report.id)
+- else
+  %br
+  %h1 Available Report : 
+  = @available_report.name
+  %br
+  %br
+  %table.rp-table{style: 'width: 100%;'}
+    %thead{style: 'text-align:center; font-weight:bold;'}
+      %tr
+        %th Username
+        %th
+
+    %tbody{style: 'text-align:center;'}
+      - @authorized_users.each do |auth_user|
+        %tr
+          %td= auth_user.user.username
+          %td= link_to 'Destroy', auth_user, :method => :delete, :data => { :confirm => 'Are you sure?' }
+          
+  
+  %td= link_to 'Add New Authorized User', add_authorized_user_available_report_path(@available_report),  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}
+%div{ id:"modal-window", class:"modal hide fade", role: "dialog", 'aria-labelledby' => "myModalLabel", 'aria-hidden' => "true"}

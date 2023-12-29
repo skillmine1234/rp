@@ -1,0 +1,66 @@
+= form_for @available_report, html: {class:'rp-form-horizontal'} do |f|
+  - if @available_report.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@available_report.errors.count, "error")} prohibited this setup from being saved:"
+      %ul
+        - @available_report.errors.full_messages.each do |msg|
+          %li= msg
+
+  .rp-control-group
+    = f.label :name, class: 'rp-control-label'
+    = f.text_field :name
+  .rp-control-group
+    = f.label :dsn, class: 'rp-control-label'
+    = f.text_field :dsn
+  .rp-control-group
+    = f.label :db_unit, class: 'rp-control-label'
+    = f.text_field :db_unit
+  .rp-control-group
+    = f.label :msg_model, class: 'rp-control-label'
+    = f.text_field :msg_model
+  .rp-control-group
+    = f.label :mime_type, class: 'rp-control-label'
+    = f.select :mime_type, Rp::AvailableReport::MIME_TYPES.map { |key, value| [key, key] }
+  .rp-control-group
+    = f.label :header_kind, class: 'rp-control-label'
+    = f.select :header_kind, Rp::AvailableReport::HEADER_KINDS.map { |key, value| [key, value] }
+  .rp-control-group
+    = f.label :money_format, class: 'rp-control-label'
+    = f.select :money_format, Rp::AvailableReport::MONEY_FORMATS.map { |key, value| [key, key] }
+  .rp-control-group
+    = f.label :normalize_space, class: 'rp-control-label'
+    = f.check_box :normalize_space, {},"Y","N"
+  .rp-control-group
+    = f.label :delimiter, class: 'rp-control-label'
+    = f.text_field :delimiter
+  .rp-control-group
+    = f.label :escape_character, class: 'rp-control-label'
+    = f.text_field :escape_character
+  .rp-control-group
+    = f.label :service_code, class: 'rp-control-label'
+    = f.text_field :service_code
+  .rp-control-group
+    = f.label :batch_size, class: 'rp-control-label'
+    = f.number_field :batch_size
+  .fieldset
+    %table.table.datatable
+      %thead
+        %tr
+          %th Param
+          %th Name
+          %th Type
+      %tbody
+        - (1..5).each do |i|
+          %tr
+            %td
+              = i
+            %td
+              = f.text_field "param#{i}_name"
+            %td
+              = f.select "param#{i}_type", Rp::AvailableReport.param_types.map { |key, value| [key.humanize, key] }
+  .rp-control-group
+    = f.label :is_public, class: 'rp-control-label'
+    = f.check_box :is_public, {},"Y","N"
+  .actions
+    = f.submit 'Save', class: "rp-btn rp-btn-primary"
+    = link_to 'Cancel', available_reports_path, class: "rp-btn"

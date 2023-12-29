@@ -1,0 +1,31 @@
+%br
+%h1 Setup : 
+
+%table.rp-table
+  %thead{style: 'text-align:center; font-weight:bold;'}
+    %tr
+      %th Scheme
+      %th Host
+      %th Username
+      %th Max Age Days
+      %th Max Per User
+      %th Query Timeout
+      %th
+
+  %tbody{style: 'text-align:center;'}
+    - @settings.each do |setting|
+      %tr
+        %td= setting.scheme
+        %td= setting.host
+        %td= setting.username
+        %td= setting.max_age_days
+        %td= setting.max_per_user
+        %td= setting.query_timeout
+        - if policy(setting).edit?
+          %td= link_to 'Edit', edit_setting_path(setting)
+        - else
+          %td
+
+%br
+
+= link_to 'New Setting', new_setting_path if @settings_count == 0 && policy(Rp::Setting).new?

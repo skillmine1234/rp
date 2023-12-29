@@ -1,0 +1,44 @@
+%h1 Listing Available Reports
+%br
+%h2.collapsible
+  Advanced Search
+  %span.caret
+.collapsible-content
+  = render :partial => 'advanced_search'
+%br
+= will_paginate
+%table.rp-table
+  %thead{style: 'text-align:center; font-weight:bold;'}
+    %tr
+      %th ID
+      %th Name
+      %th
+      %th
+      %th
+      %th
+      %th
+
+  %tbody{style: 'text-align:center;'}
+    - @available_reports.each do |report|
+      %tr
+        %td= report.id
+        %td= report.name
+        - if policy(report).generate?
+          %td
+            - if report.params_cnt.present? and report.params_cnt > 0
+              = link_to 'Generate', generate_available_report_path(report),  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window', :class=>"generate-rp-link"}
+            - else
+              = render partial: 'rp/reports/form', locals: { report: report }
+          %td
+            = link_to 'Schedule', generate_available_report_path(report, schedule: true),  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}
+            %div{ id:"modal-window", class:"modal hide fade", role: "dialog", 'aria-labelledby' => "myModalLabel", 'aria-hidden' => "true"}
+        - else
+          %td
+          %td
+        %td= link_to 'Show', available_report_path(report)
+        - if policy(report).add_authorized_user?
+          %td= link_to 'View Authorized Users', authorized_users_path(available_report_id: report.id)
+        - if policy(report).destroy?
+          %td= link_to 'Destroy', report, :method => :delete, :data => { :confirm => 'Are you sure?' }
+            
+          

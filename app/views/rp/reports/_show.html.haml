@@ -1,0 +1,22 @@
+.modal-header
+  %button.close{"aria-hidden" => "true", "data-dismiss" => "modal", :type => "button"} ×
+  %h3#myModalLabel Parameters
+.modal-body
+  %table.table.datatable
+    %thead
+      %tr
+        %th Param
+        %th Name
+        %th Type
+        %th Value
+    %tbody
+      - (1..5).each do |i|
+        %tr
+          %td
+            = i
+          %td
+            = report.send("param#{i}_name")
+          %td
+            = report.send("param#{i}_type")
+          %td
+            = report.send("param#{i}_value")

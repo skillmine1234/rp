@@ -1,0 +1,46 @@
+%h1 Listing Reports
+%br
+= will_paginate
+%br
+%table.rp-table
+  %thead{style: 'text-align:center; font-weight:bold;'}
+    %tr
+      %th Id
+      %th Name
+      %th State
+      %th Queued At
+      %th Scheduled At
+      %th Started at
+      %th Finished at
+      %th Line count
+      %th File name
+      %th File path
+      %th
+      %th
+  %tbody{style: 'text-align:center;'}
+    - @reports.each do |report|
+      %tr
+        %td= link_to report.id, report_path(report.id),  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}
+        %td= report.name
+        %td= report.state
+        %td= l report.queued_at 
+        %td= l report.pending_report.try(:run_at)
+        %td= l report.started_at
+        %td= l report.finished_at
+        %td= report.line_count
+        %td= report.file_name
+        %td= report.file_path
+        - if report.state == 'COMPLETED'
+          -if report.line_count > 0 and policy(report).download?
+            %td= link_to 'Download', download_report_path(report)
+          - elsif report.line_count == 0
+            %td NO DATA FOUND
+        - elsif report.state == 'FAILED'
+          %td= link_to 'Fault', show_fault_report_path(report.id),  {:remote => true, 'data-toggle' =>  "modal", 'data-target' => '#modal-window'}
+        - else
+          %td
+        - if report.state == 'NEW' && report.pending_report.nil? && policy(report).retry?
+          %td= link_to 'Retry', retry_report_path(report), method: :post
+        - else
+          %td
+%div{ id:"modal-window", class:"modal hide fade", role: "dialog", 'aria-labelledby' => "myModalLabel", 'aria-hidden' => "true"}

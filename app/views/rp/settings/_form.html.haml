@@ -1,0 +1,32 @@
+= form_for @setting, html: {class:'rp-form-horizontal'} do |f|
+  - if @setting.errors.any?
+    #error_explanation
+      %h2= "#{pluralize(@setting.errors.count, "error")} prohibited this setup from being saved:"
+      %ul
+        - @setting.errors.full_messages.each do |msg|
+          %li= msg
+  .rp-control-group
+    = f.label :scheme, class: 'rp-control-label'
+    = f.select :scheme, Rp::Setting::FILE_SCHEMES
+  .rp-control-group
+    = f.label :host, class: 'rp-control-label'
+    = f.text_field :host
+  .rp-control-group
+    = f.label :username, class: 'rp-control-label'
+    = f.text_field :username
+  .rp-control-group
+    = f.label :password, class: 'rp-control-label'
+    = f.password_field :password
+  .rp-control-group
+    = f.label :max_age_days, class: 'rp-control-label'
+    = f.number_field :max_age_days
+  .rp-control-group
+    = f.label :max_per_user, class: 'rp-control-label'
+    = f.number_field :max_per_user
+  .rp-control-group
+    = f.label :query_timeout, 'Query timeout (in seconds)', class: 'rp-control-label'
+    = f.number_field :query_timeout
+
+  .actions
+    = f.submit 'Save', class: "rp-btn rp-btn-primary"
+    = link_to 'Cancel', settings_path, class: "rp-btn"

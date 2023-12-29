@@ -1,0 +1,101 @@
+%h3 Available Report Details 
+%br
+%table.rp-table
+  %tr
+    %td.label Code
+    %td.value
+      = @available_report.code
+    %td
+  %tr
+    %td.label Name
+    %td
+      = @available_report.name
+    %td
+  %tr
+    %td.label Service Code
+    %td
+      = @available_report.service_code
+  %tr
+    %td.label DSN
+    %td.value
+      = @available_report.dsn
+    %td
+  %tr
+    %td.label DB Unit
+    %td
+      = @available_report.db_unit
+    %td
+  %tr
+    %td.label Message Model
+    %td
+      = @available_report.msg_model
+    %td
+  %tr
+    %td.label Mime Type
+    %td
+      = @available_report.mime_type
+    %td
+  %tr
+    %td.label File Extension
+    %td
+      = @available_report.file_ext
+    %td
+  %tr
+    %td.label Public
+    %td
+      = @available_report.is_public
+    %td
+  %tr
+    %td.label Batch Size
+    %td.value
+      = @available_report.batch_size
+    %td
+  %tr
+    %td.label Header Kind
+    %td.value
+      = @available_report.header_kind
+  %tr
+    %td.label Money Format
+    %td
+      = @available_report.money_format
+    %td
+  %tr
+    %td.label Normailze Space
+    %td.value
+      = @available_report.normalize_space
+    %td
+  %tr
+    %td.label Delimiter
+    %td.value
+      = @available_report.delimiter
+    %td
+  %tr
+    %td.label Escape Character
+    %td.value
+      = @available_report.escape_character
+  %tr
+    %td.label Created At
+    %td.value
+      = @available_report.created_at.try(:strftime, "%d/%m/%Y %I:%M%p")
+    %td
+  %tr
+    %td.label Updated At
+    %td.value
+      = @available_report.updated_at.try(:strftime, "%d/%m/%Y %I:%M%p")
+    %td
+  - unless @available_report.params_cnt == 0
+    %table.table.datatable
+      %thead
+        %tr
+          %th Param
+          %th Name
+          %th Type
+      %tbody
+        - (1..@available_report.params_cnt).each do |i|
+          %tr
+            %td
+              = i
+            %td
+              = @available_report.send("param#{i}_name")
+            %td
+              = @available_report.send("param#{i}_type")

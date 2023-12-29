@@ -1,0 +1,22 @@
+= form_tag(reports_path, method: :post, id: 'generate_form') do
+  = hidden_field_tag :available_report_id, report.id
+  - if report.params_cnt.present? and report.params_cnt > 0
+    - (1..report.params_cnt).each do |i|
+      %table.rp-modal-table
+        %tr
+          %td
+            = label_tag report["param#{i}"]["param#{i}_name"] || "Parameter #{i}"
+          %td
+            - if report.send("param#{i}_type") == 'datetime'
+              = send('datetime_local_field_tag', "param#{i}_value")
+            - else
+              = send("#{report["param#{i}"]["param#{i}_type"] || 'text'}_field_tag", "param#{i}_value")
+            = hidden_field_tag "param#{i}_type", report.send("param#{i}_type")
+            = hidden_field_tag "param#{i}_name", report.send("param#{i}_name")
+  - if params[:schedule] == 'true'
+    %table.rp-modal-table
+      %tr
+        %td= label_tag 'Run At'
+        %td= datetime_local_field_tag :run_at
+  %div
+    = submit_tag 'Generate', class: 'rp-btn'
